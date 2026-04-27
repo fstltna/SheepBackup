@@ -116,14 +116,6 @@ ReadConfigFile();
 print "SheepBackup - back up your Sheepshaver Boot Volume - version $VERSION\n";
 print "==================================================================\n";
 
-my $running=`ps ax|grep SheepShaver-x86_64.AppImage|grep -v grep`;
-
-if ($running ne "")
-{
-	print "Sheepshaver seems to be running. It must be shut down before running a backup.\n";
-	exit 1;
-}
-
 if ($DOSNAPSHOT == -1)
 {
         print "Running Manual Snapshot\n";
@@ -142,6 +134,13 @@ if (defined $CMDOPTION)
                 print "Settings saved - please rerun backup\n";
                 exit 0;
 	}
+}
+
+my $running=`ps ax|grep SheepShaver-x86_64.AppImage|grep -v grep`;
+if ($running ne "")
+{
+	print "Sheepshaver seems to be running. It must be shut down before running a backup.\n";
+	exit 1;
 }
 
 sub SnapShotFunc
