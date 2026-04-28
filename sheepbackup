@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Set these for your situation
-my $TARCMD = "/bin/tar cvf";
+my $TARCMD = "/bin/tar cvzf";
 my $VERSION = "1.0";
 
 # Init file data
@@ -146,11 +146,11 @@ if ($running ne "")
 sub SnapShotFunc
 {
         print "Backing up SBBS files: ";
-        if (-f "$BACKUPDIR/snapshot.tar")
+        if (-f "$BACKUPDIR/snapshot.tgz")
         {
-                unlink("$BACKUPDIR/snapshot.tar");
+                unlink("$BACKUPDIR/snapshot.tgz");
         }
-        system("$TARCMD $BACKUPDIR/snapshot.tar $SHEEPFILE > /dev/null 2>\&1");
+        system("$TARCMD $BACKUPDIR/snapshot.tgz $SHEEPFILE > /dev/null 2>\&1");
         print "\nBackup Completed.\n";
 }
 
@@ -185,34 +185,34 @@ if (! -d $BACKUPDIR)
 }
 print "Moving existing backups: ";
 
-if (-f "$BACKUPDIR/sheepbackup-5.tar")
+if (-f "$BACKUPDIR/sheepbackup-5.tgz")
 {
-	unlink("$BACKUPDIR/sheepbackup-5.tar")  or warn "Could not unlink $BACKUPDIR/sheepbackup-5.tar: $!";
+	unlink("$BACKUPDIR/sheepbackup-5.tgz")  or warn "Could not unlink $BACKUPDIR/sheepbackup-5.tgz: $!";
 }
-if (-f "$BACKUPDIR/sheepbackup-4.tar")
+if (-f "$BACKUPDIR/sheepbackup-4.tgz")
 {
-	rename("$BACKUPDIR/sheepbackup-4.tar", "$BACKUPDIR/sheepbackup-5.tar");
+	rename("$BACKUPDIR/sheepbackup-4.tgz", "$BACKUPDIR/sheepbackup-5.tgz");
 }
-if (-f "$BACKUPDIR/sheepbackup-3.tar")
+if (-f "$BACKUPDIR/sheepbackup-3.tgz")
 {
-	rename("$BACKUPDIR/sheepbackup-3.tar", "$BACKUPDIR/sheepbackup-4.tar");
+	rename("$BACKUPDIR/sheepbackup-3.tgz", "$BACKUPDIR/sheepbackup-4.tgz");
 }
-if (-f "$BACKUPDIR/sheepbackup-2.tar")
+if (-f "$BACKUPDIR/sheepbackup-2.tgz")
 {
-	rename("$BACKUPDIR/sheepbackup-2.tar", "$BACKUPDIR/sheepbackup-3.tar");
+	rename("$BACKUPDIR/sheepbackup-2.tgz", "$BACKUPDIR/sheepbackup-3.tgz");
 }
-if (-f "$BACKUPDIR/sheepbackup-1.tar")
+if (-f "$BACKUPDIR/sheepbackup-1.tgz")
 {
-	rename("$BACKUPDIR/sheepbackup-1.tar", "$BACKUPDIR/sheepbackup-2.tar");
+	rename("$BACKUPDIR/sheepbackup-1.tgz", "$BACKUPDIR/sheepbackup-2.tgz");
 }
 print "Done\nCreating Backup: ";
-system("$TARCMD $BACKUPDIR/sheepbackup-1.tar --exclude='/sbbs/ctrl/localspy*.sock' --exclude='/sbbs/ctrl/status.sock' $SHEEPFILE >/dev/null 2>\&1");
+system("$TARCMD $BACKUPDIR/sheepbackup-1.tgz --exclude='/sbbs/ctrl/localspy*.sock' --exclude='/sbbs/ctrl/status.sock' $SHEEPFILE >/dev/null 2>\&1");
 if ($BACKUPSERVER ne "")
 {
 	print "Offsite backup requested\n";
-	print "Copying $BACKUPDIR/sheepbackup-1.tar to $BACKUPSERVER\n";
-	PrintDebugCommand("rsync -avz -e ssh $BACKUPDIR/sheepbackup-1.tar $BACKUPUSER\@$BACKUPSERVER:$BACKUPPATH\n");
-	system ("rsync -avz -e ssh $BACKUPDIR/sheepbackup-1.tar $BACKUPUSER\@$BACKUPSERVER:$BACKUPPATH");
+	print "Copying $BACKUPDIR/sheepbackup-1.tgz to $BACKUPSERVER\n";
+	PrintDebugCommand("rsync -avz -e ssh $BACKUPDIR/sheepbackup-1.tgz $BACKUPUSER\@$BACKUPSERVER:$BACKUPPATH\n");
+	system ("rsync -avz -e ssh $BACKUPDIR/sheepbackup-1.tgz $BACKUPUSER\@$BACKUPSERVER:$BACKUPPATH");
 }
 
 print("Done!\n");
